@@ -1,4 +1,4 @@
-const { User, User_Details } = require("../models");
+const { Users, User_Details } = require("../models");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const JWT_SECRET = process.env.JWT_SECRET
@@ -9,7 +9,7 @@ async function register(req, res, next) {
     const { user, user_details } = req.body;
 
     //cek email
-    const existingUser = await User.findOne({ where: { email: user.email } });
+    const existingUser = await Users.findOne({ where: { email: user.email } });
     if (existingUser) {
       return res.status(400).json({
         error: "EMAIL ALREADY IN USE!.",
@@ -20,14 +20,14 @@ async function register(req, res, next) {
     const hashedPassword = await bcrypt.hash(user.password, 10);
 
     // Create user
-    const userData = await User.create({
+    const userData = await Users.create({
       ...user,
       password: hashedPassword,
     });
 
     // Create user details
     const userDetailsData = await User_Details.create({
-      id: userData.id,
+      idUser: userData.id,
       ...user_details,
     });
 
@@ -48,7 +48,7 @@ async function login(req, res, next) {
     const { email, password } = req.body;
 
     //cekUser
-    const user = await User.findOne({
+    const user = await Users.findOne({
       where: {
         email: email,
       },
