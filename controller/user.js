@@ -16,6 +16,32 @@ async function getAll(req, res, next) {
     next(error);
   }
 }
+async function getOne(req, res, next) {
+  try {
+    const { id } = req.params;
+    const data = await Users.findOne({
+      where: {
+        id,
+      },
+      include: [
+        {
+          model: User_Details,
+          as: "user_detail",
+        },
+      ],
+    });
+    if (!data) {
+        return res.status(404).json({
+            message: "USER NOT FOUND!"
+        })
+    }
+    res.status(200).json(data);
+  } catch (error) {
+    next(error);
+  }
+}
+
+
 
 async function update(req, res, next) {
     try {
@@ -117,4 +143,4 @@ async function deleted(req, res, next) {
   }
   
 
-module.exports = { getAll, update, deleted, updateDetail };
+module.exports = { getAll, getOne, update, deleted, updateDetail };

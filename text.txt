@@ -1,0 +1,3 @@
+npx sequelize-cli model:generate --name Item --attributes name:string,price:decimal,image:string,description:text,stock:integer,color:string,size:string
+npx sequelize-cli model:generate --name Order --attributes idUser:integer,order_price:decimal,payment_method:string,date_order_placed:string,date_order_paid:string
+npx sequelize-cli model:generate --name Orders_Items --attributes idOrder:integer,idItem:integer,qty:integer,color:string,size:string
