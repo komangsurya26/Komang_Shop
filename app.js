@@ -1,6 +1,7 @@
 const express = require("express");
 const morgan = require('morgan');
 const userRouter = require("./routes/user.routes");
+const itemRouter = require("./routes/item.routes");
 
 const app = express();
 
@@ -12,18 +13,21 @@ app.get("/", (req, res) => {
 });
 
 app.use(userRouter);
+app.use(itemRouter);
 
+//! errror handler
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({
-    error: "SOMETHING WENT WRONG!",
+    status:500,
+    error: err.message,
   });
 });
 
 app.use((req, res) => {
   res.status(404).json({
-    status: "failed",
-    error: "Method and EndPoint Not Found",
+    status: 404,
+    error: "METHODE AND ENDPOINT NOT FOUND!",
   });
 });
 

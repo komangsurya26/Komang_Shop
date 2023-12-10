@@ -5,12 +5,12 @@ const { verifyAccesToken } = require("../middleware/verifyAccess");
 const router = require("express").Router();
 
 router
-  .post("/register", register)
-  .post("/login", login)
-  .get("/all", getAll)
-  .get("/user/:id", getOne)
-  .put("/update", verifyAccesToken, update)
-  .put("/updateDetail", verifyAccesToken, updateDetail)
-  .delete("/delete", verifyAccesToken, deleted);
+  .post("/register/v1", register)
+  .post("/login/v1", login)
+  .get("/all/v1", getAll)
+  .get("/user/v1/:id", getOne)
+  .put("/update/v1", verifyAccesToken, update)
+  .put("/updateDetail/v1", verifyAccesToken, updateDetail)
+  .delete("/delete/v1", verifyAccesToken, deleted);
 
 module.exports = router;

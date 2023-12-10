@@ -6,35 +6,40 @@ const JWT_SECRET = process.env.JWT_SECRET
 
 async function register(req, res, next) {
   try {
-    const { user, user_details } = req.body;
+    const { firstName, lastName, email, password, phone } = req.body;
+
+    if (!email || !password) {
+      return res.status(400).json({
+        status:400,
+        message: "INPUT SETIDAKNYA EMAIL & PASSWORD!",
+      });
+    }
 
     //cek email
-    const existingUser = await Users.findOne({ where: { email: user.email } });
-    if (existingUser) {
+    const cekEmail = await Users.findOne({ where: { email } });
+    if (cekEmail) {
       return res.status(400).json({
+        status:400,
         error: "EMAIL ALREADY IN USE!.",
       });
     }
 
     //hash password
-    const hashedPassword = await bcrypt.hash(user.password, 10);
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     // Create user
     const userData = await Users.create({
-      ...user,
+      firstName,
+      lastName,
+      email,
+      phone,
       password: hashedPassword,
-    });
-
-    // Create user details
-    const userDetailsData = await User_Details.create({
-      idUser: userData.id,
-      ...user_details,
-    });
-
-    // Combine user and user_details into a single response object
+    })
+    
     const responseData = {
+        status:201,
       message: "USER CREATE SUCCESS.",
-      data: [userData, userDetailsData],
+      data: userData
     };
 
     res.status(201).json(responseData);
@@ -55,6 +60,7 @@ async function login(req, res, next) {
     });
     if (!user) {
       return res.status(401).json({
+        status:401,
         message: `USER: ${email} NOT FOUND!!`,
       });
     }
@@ -72,11 +78,13 @@ async function login(req, res, next) {
       const token = jwt.sign(payload, JWT_SECRET, { expiresIn: expiredIn });
 
       return res.status(200).json({
+        status:200,
         message: "LOGIN SUCCESS!",
         token: token,
       });
     } else {
       return res.status(402).json({
+        status:402,
         message: "PASSWORD WRONG!!",
       });
     }
