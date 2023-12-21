@@ -34,12 +34,19 @@ async function register(req, res, next) {
       email,
       phone,
       password: hashedPassword,
-    })
+    });
+
+    const userDetail = await User_Details.create({
+      idUser: userData.id,
+    });
     
     const responseData = {
-        status:201,
+      status: 201,
       message: "USER CREATE SUCCESS.",
-      data: userData
+      data: {
+        user: userData,
+        detail: userDetail,
+      },
     };
 
     res.status(201).json(responseData);

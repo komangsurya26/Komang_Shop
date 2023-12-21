@@ -15,6 +15,15 @@ module.exports = (sequelize, DataTypes) => {
   }
   User_Details.init(
     {
+      idUser: {
+        references: {
+          model: "Users",
+          key: "id",
+        },
+        type: DataTypes.INTEGER,
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE",
+      },
       address: DataTypes.STRING,
       city: DataTypes.STRING,
       postal_code: DataTypes.STRING,

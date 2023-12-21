@@ -6,7 +6,7 @@ async function verifyAccesToken(req, res, next) {
     const token = req.headers.authorization;
     if (!token) {
       return res.status(401).json({
-        staus: 401,
+        status: 401,
         error: "TOKEN NOT FOUND!!",
       });
     }
@@ -23,6 +23,7 @@ async function verifyAccesAdmin(req, res, next) {
     const admin = req.user.isAdmin;
     if (admin === false) {
       return res.status(403).json({
+        status:403,
         error: "You are not admin!!",
       });
     }

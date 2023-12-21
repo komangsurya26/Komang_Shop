@@ -44,7 +44,7 @@ async function getOne(req, res, next) {
         data: data
     });
   } catch (error) {
-    next(error);
+    next(error)
   }
 }
 
@@ -136,7 +136,7 @@ async function updateDetail(req, res, next) {
     const responseData = {
       status: 201,
       message: "USER DETAILS UPDATE SUCCESS.",
-      user: user,
+      userDetail: user,
     };
 
     res.status(201).json(responseData);
