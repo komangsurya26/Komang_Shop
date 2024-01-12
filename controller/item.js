@@ -5,23 +5,25 @@ async function createItem (req, res, next) {
     const { name, price, image, description, stock, color, size } = req.body;
     if (!name||!price||!image) {
         res.status(400).json({
+            status: 400,
             message: "INPUT SETIDAKNYA NAME,PRICE,IMAGE!!"
         })
+    } else {
+        const createdItem = await Items.create({
+            name,
+            price,
+            image,
+            size,
+            stock,
+            description,
+            color,
+          });
+          res.status(201).json({
+            status: 201,
+            message: "CREATE ITEM SUCCESS!",
+            item: createdItem,
+          });
     }
-    const createdItem = await Items.create({
-      name,
-      price,
-      image,
-      size,
-      stock,
-      description,
-      color,
-    });
-    res.status(201).json({
-      status: 201,
-      message: "CREATE ITEM SUCCESS!",
-      item: createdItem,
-    });
   } catch (error) {
     next(error);
   }

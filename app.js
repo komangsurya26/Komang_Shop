@@ -2,6 +2,7 @@ const express = require("express");
 const morgan = require('morgan');
 const userRouter = require("./routes/user.routes");
 const itemRouter = require("./routes/item.routes");
+const orderRouter = require("./routes/order.routes");
 
 const app = express();
 
@@ -14,6 +15,7 @@ app.get("/", (req, res) => {
 
 app.use(userRouter);
 app.use(itemRouter);
+app.use(orderRouter);
 
 //! errror handler
 app.use((err, req, res, next) => {
