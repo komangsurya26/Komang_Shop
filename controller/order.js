@@ -65,9 +65,8 @@ async function updateOrder(req, res, next) {
         message: "ORDER NOT FOUND",
       });
     } else {
-
-      updateOrder.date_order_paid = dateFormat || updateOrder.date_order_paid;
-      updateOrder.status_order = "Success" || updateOrder.status_order;
+      updateOrder.date_order_paid = dateFormat
+      updateOrder.status_order = "Success"
 
       await updateOrder.save();
 
