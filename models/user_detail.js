@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   User_Details.init(
     {
-      idUser: {
+      user_id: {
         references: {
           model: "Users",
           key: "id",
