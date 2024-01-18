@@ -53,7 +53,7 @@ async function createUserDetails(req, res, next) {
     const userId = req.user.id;
     const { address, city, postal_code, country_code } = req.body;
     const data = await User_Details.create({
-      idUser: userId,
+      user_id: userId,
       address,
       city,
       postal_code,
@@ -76,7 +76,7 @@ async function update(req, res, next) {
     const user = await Users.findOne({
       where: {
         id: userId,
-      },
+      }
     });
 
     if (!user) {
@@ -86,14 +86,21 @@ async function update(req, res, next) {
       });
     }
 
-    const { firstName, lastName, email, password, phone, isAdmin } = req.body;
+    const {
+      firstName,
+      lastName,
+      email,
+      password,
+      phone,
+      address,
+    } = req.body;
 
     user.firstName = firstName || user.firstName;
     user.lastName = lastName || user.lastName;
     user.email = email || user.email;
     user.password = password ? await bcrypt.hash(password, 10) : user.password;
     user.phone = phone || user.phone;
-    user.isAdmin = isAdmin || user.isAdmin;
+    user.address = address || user.address;
 
     await user.save(); // Save the changes to the database
 
@@ -113,7 +120,7 @@ async function updateDetail(req, res, next) {
     const userId = req.user.id;
     const user = await User_Details.findOne({
       where: {
-        idUser: userId,
+        user_id: userId,
       },
     });
 

@@ -6,7 +6,17 @@ const JWT_SECRET = process.env.JWT_SECRET
 
 async function register(req, res, next) {
   try {
-    const { firstName, lastName, email, password, phone } = req.body;
+    const {
+      firstName,
+      lastName,
+      email,
+      password,
+      phone,
+      address,
+      city,
+      postal_code,
+      country_code,
+    } = req.body;
 
     if (!email || !password) {
       return res.status(400).json({
@@ -28,24 +38,37 @@ async function register(req, res, next) {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Create user
-    const userData = await Users.create({
-      firstName,
-      lastName,
-      email,
-      phone,
-      password: hashedPassword,
-    });
-
-    const userDetail = await User_Details.create({
-      idUser: userData.id,
-    });
+    const userData = await Users.create(
+      {
+        firstName,
+        lastName,
+        email,
+        phone,
+        password: hashedPassword,
+        user_detail: [
+          {
+            address,
+            city,
+            postal_code,
+            country_code,
+          },
+        ],
+      },
+      {
+        include: [
+          {
+            model: User_Details,
+            as: "user_detail",
+          },
+        ],
+      }
+    );
     
     const responseData = {
       status: 201,
       message: "USER CREATE SUCCESS.",
       data: {
         user: userData,
-        detail: userDetail,
       },
     };
 
@@ -66,8 +89,8 @@ async function login(req, res, next) {
       },
     });
     if (!user) {
-      return res.status(401).json({
-        status:401,
+      return res.status(404).json({
+        status:404,
         message: `USER: ${email} NOT FOUND!!`,
       });
     }
@@ -78,7 +101,6 @@ async function login(req, res, next) {
       const payload = {
         id: user.id,
         email: user.email,
-        isAdmin: user.isAdmin,
       };
 
       const expiredIn = 60 * 60 * 1;
