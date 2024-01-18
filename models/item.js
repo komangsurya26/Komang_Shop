@@ -12,17 +12,18 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
     }
   }
-  Items.init({
-    name: DataTypes.STRING,
-    price: DataTypes.DECIMAL,
-    image: DataTypes.STRING,
-    description: DataTypes.TEXT,
-    stock: DataTypes.INTEGER,
-    color: DataTypes.STRING,
-    size: DataTypes.STRING
-  }, {
-    sequelize,
-    modelName: 'Items',
-  });
+  Items.init(
+    {
+      item_name: DataTypes.STRING,
+      item_image: DataTypes.STRING,
+      item_description: DataTypes.TEXT,
+      item_stock: DataTypes.INTEGER,
+      item_price: DataTypes.DECIMAL,
+    },
+    {
+      sequelize,
+      modelName: "Items",
+    }
+  );
   return Items;
 };

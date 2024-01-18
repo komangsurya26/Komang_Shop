@@ -9,25 +9,17 @@ module.exports = {
         allowNull: false,
         primaryKey: true,
       },
-      idUser: {
+      user_id: {
+        references: {
+          model: "Users",
+          key: "id",
+        },
         type: Sequelize.INTEGER,
       },
-      idItem: {
-        type: Sequelize.INTEGER,
-      },
-      qty: {
-        type: Sequelize.INTEGER,
-      },
-      color: {
-        type: Sequelize.STRING,
-      },
-      size: {
-        type: Sequelize.STRING,
-      },
-      order_price: {
+      total_order_price:{
         type: Sequelize.DECIMAL,
       },
-      payment_method: {
+      status_order:{
         type: Sequelize.STRING,
       },
       date_order_placed: {
