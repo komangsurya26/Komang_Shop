@@ -5,29 +5,50 @@ const dateFormat = getFormattedDate()
 async function createOrder(req, res, next) {
   try {
     const user_id = req.user.id;
-    const { item_id, quantity } = req.body;
+    const orderDetails = req.body;
 
-    if (!item_id || !quantity || quantity <= 0) {
+    if (!Array.isArray(orderDetails) || orderDetails.length === 0) {
       return res.status(400).json({
         status: 400,
-        message: "Invalid input. Please provide valid item_id and quantity.",
+        message: "Invalid input. Please provide an array of items and quantities.",
       });
     }
 
-    // Dapatkan item dari tabel Items
-    const item = await Items.findByPk(item_id);
-    if (!item) {
-      return res.status(404).json({
-        status: 404,
-        message: "Item not found"
+    const orderItems = [];
+
+    let totalOrderAmount = 0;
+
+    for (const orderDetail of orderDetails) {
+      const { item_id, quantity } = orderDetail;
+
+      if (!item_id || !quantity || quantity <= 0) {
+        return res.status(400).json({
+          status: 400,
+          message: "Invalid input. Please provide valid item_id and quantity for each item.",
+        });
+      }
+
+      const item = await Items.findByPk(item_id);
+      if (!item) {
+        return res.status(404).json({
+          status: 404,
+          message: `Item with id ${item_id} not found`,
+        });
+      }
+
+      // Hitung total_amount
+      const total_amount = item.item_price * quantity;
+      totalOrderAmount += total_amount; 
+
+      orderItems.push({
+        item,
+        quantity,
+        total_amount,
       });
     }
 
-    // Hitung total_amount
-    const total_amount = item.item_price * quantity;
-
-    // Hitung total_order_price (total_amount + 10%)
-    const total_order_price = total_amount * 1.1;
+    // Hitung total_order_price (total_order_amount + 10%)
+    const total_order_price = totalOrderAmount * 1.1;
 
     // Buat order
     const newOrder = await Order.create({
@@ -38,17 +59,19 @@ async function createOrder(req, res, next) {
     });
 
     // Tambahkan item ke order dengan kuantitas dan total_amount
-    await newOrder.addItems(item, {
-      through: { quantity, total_amount },
-    });
+    for (const orderItem of orderItems) {
+      await newOrder.addItems(orderItem.item, {
+        through: { quantity: orderItem.quantity, total_amount: orderItem.total_amount },
+      });
+    }
 
-    const order = await newOrder.getItems()
+    const order = await newOrder.getItems();
 
     res.status(201).json({
       status: 201,
       message: "Order created successfully",
       Order: newOrder,
-      Order_Detail: order
+      Order_Detail: order,
     });
   } catch (error) {
     next(error);
