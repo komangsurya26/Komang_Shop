@@ -1,5 +1,0 @@
-example for data model:
-
-npx sequelize-cli model:generate --name Item --attributes name:string,price:decimal,image:string,description:text,stock:integer,color:string,size:string
-npx sequelize-cli model:generate --name Order --attributes idUser:integer,idItem:integer,qty:integer,color:string,size:string,order_price:decimal,payment_method:string,date_order_placed:string,date_order_paid:string
-npx sequelize-cli model:generate --name Order_Items --attributes order_id:integer,item_id:integer,quantity:integer,total_amount:decimal
