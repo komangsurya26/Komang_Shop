@@ -1,3 +1,4 @@
+const { SuccessResponse, ErrorResponse } = require("../middleware/handlerMiddleware");
 const { Users, User_Details } = require("../models");
 const bcrypt = require("bcrypt");
 
@@ -11,81 +12,31 @@ async function getAll(req, res, next) {
         },
       ],
     });
-    res.status(200).json({
-        status:200,
-        data: data
-    });
+    res.status(200).json(new SuccessResponse("Get All Data Success!",200,data));
   } catch (error) {
     next(error);
   }
 }
 async function getOne(req, res, next) {
   try {
-    const { id } = req.params;
-    const data = await Users.findOne({
-      where: {
-        id,
-      },
-      include: [
-        {
-          model: User_Details,
-          as: "user_detail",
-        },
-      ],
+    // Find User
+    const id = +req.params.id;
+
+    //Include User Detail To User
+    const user = await Users.findOne({
+      where: { id },
+      include: [{ model: User_Details, as: "user_detail" }],
     });
-    if (!data) {
-      return res.status(404).json({
-        status:404,
-        message: "USER NOT FOUND!",
-      });
-    }
-    res.status(200).json({
-        status:200,
-        data: data
-    });
+    res.status(200).json(new SuccessResponse("Get User Success",200,user))
   } catch (error) {
     next(error)
   }
 }
 
-async function createUserDetails(req, res, next) {
-  try {
-    const userId = req.user.id;
-    const { address, city, postal_code, country_code } = req.body;
-    const data = await User_Details.create({
-      user_id: userId,
-      address,
-      city,
-      postal_code,
-      country_code,
-    });
-    const response = {
-      status: 201,
-      message: "CREATE USER DETAILS SUCCESS",
-      data: data,
-    };
-    res.status(201).json(response);
-  } catch (error) {
-    next(error);
-  }
-}
 
 async function update(req, res, next) {
   try {
-    const userId = req.user.id;
-    const user = await Users.findOne({
-      where: {
-        id: userId,
-      }
-    });
-
-    if (!user) {
-      return res.status(404).json({
-        status:404,
-        message: "USER NOT FOUND!",
-      });
-    }
-
+    const id = +req.params.id;
     const {
       firstName,
       lastName,
@@ -94,6 +45,13 @@ async function update(req, res, next) {
       phone,
       address,
     } = req.body;
+
+    const user = await Users.findOne({ where: { id } });
+
+    if (!user) {
+      const response = new ErrorResponse("USER NOT FOUND!",404)
+      return res.status(404).json(response);
+    }
 
     user.firstName = firstName || user.firstName;
     user.lastName = lastName || user.lastName;
@@ -104,78 +62,71 @@ async function update(req, res, next) {
 
     await user.save(); // Save the changes to the database
 
-    const responseData = {
-      status: 200,
-      message: "USER UPDATE SUCCESS.",
-      user: user,
-    };
+    const responseData = new SuccessResponse("USER UPDATE SUCCESS.", 200, user);
 
     res.status(200).json(responseData);
   } catch (error) {
     next(error);
   }
 }
+
 async function updateDetail(req, res, next) {
   try {
-    const userId = req.user.id;
-    const user = await User_Details.findOne({
-      where: {
-        user_id: userId,
-      },
-    });
+    const user_id = +req.params.user_id;
+
+    const user = await User_Details.findOne({ where: { user_id } });
 
     if (!user) {
-      return res.status(404).json({
-        status:404,
-        message: "USER NOT FOUND!",
-      });
+      const response = new ErrorResponse("USER NOT FOUND!", 404);
+      return res.status(404).json(response);
     }
 
     const { address, city, postal_code, country_code } = req.body;
 
+    // Update user details if provided in the request body
     user.address = address || user.address;
     user.city = city || user.city;
     user.postal_code = postal_code || user.postal_code;
     user.country_code = country_code || user.country_code;
 
-    await user.save(); // Save the changes to the database
+    // Save the updated user details
+    await user.save();
 
-    const responseData = {
-      status: 201,
-      message: "USER DETAILS UPDATE SUCCESS.",
-      userDetail: user,
-    };
+    const responseData = new SuccessResponse(
+      "USER DETAILS UPDATE SUCCESS.",
+      201,
+      user
+    );
 
     res.status(201).json(responseData);
   } catch (error) {
     next(error);
   }
 }
+
+
 async function deleted(req, res, next) {
   try {
-    const userId = req.user.id;
+    const id = +req.params.id;
     const user = await Users.findOne({
       where: {
-        id: userId,
+        id,
       },
     });
 
     if (!user) {
-      return res.status(404).json({
-        message: "USER NOT FOUND or ALREADY DELETED.",
-      });
+      const response = new ErrorResponse("USER NOT FOUND or ALREADY DELETED.", 404)
+      return res.status(404).json(response);
     }
 
     await Users.destroy({
       where: {
-        id: userId,
+        id,
       },
     });
 
-    res.status(200).json({
-      status: 200,
-      message: "DELETE SUCCESS!",
-    });
+    const responses = new SuccessResponse("DELETE SUCCESS!", 200, null);
+    res.status(200).json(responses);
   } catch (error) {
     next(error);
   }
@@ -187,5 +138,4 @@ module.exports = {
   update,
   deleted,
   updateDetail,
-  createUserDetails,
 };

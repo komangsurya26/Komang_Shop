@@ -1,103 +1,68 @@
-const { Order, Items } = require("../models");
+const { ErrorResponse, SuccessResponse } = require("../middleware/handlerMiddleware");
+const { Users,Order, Items } = require("../models");
 const { getFormattedDate } = require("../utils/date");
 const dateFormat = getFormattedDate()
 
 async function createOrder(req, res, next) {
   try {
-    const user_id = req.user.id;
-    const orderDetails = req.body;
+    const user_id = +req.params.user_id 
+    const { item_id, quantity } = req.body;
 
-    if (!Array.isArray(orderDetails) || orderDetails.length === 0) {
-      return res.status(400).json({
-        status: 400,
-        message: "Invalid input. Please provide an array of items and quantities.",
-      });
+    const findUser = await Users.findByPk(user_id)
+    if (!findUser) {
+      const response = new ErrorResponse("User Not Found!", 404);
+      res.status(404).json(response);
     }
-
-    const orderItems = [];
-
-    let totalOrderAmount = 0;
-
-    for (const orderDetail of orderDetails) {
-      const { item_id, quantity } = orderDetail;
-
-      if (!item_id || !quantity || quantity <= 0) {
-        return res.status(400).json({
-          status: 400,
-          message: "Invalid input. Please provide valid item_id and quantity for each item.",
-        });
-      }
-
-      const item = await Items.findByPk(item_id);
-      if (!item) {
-        return res.status(404).json({
-          status: 404,
-          message: `Item with id ${item_id} not found`,
-        });
-      }
-
-      // Hitung total_amount
-      const total_amount = item.item_price * quantity;
-      totalOrderAmount += total_amount; 
-
-      orderItems.push({
-        item,
-        quantity,
-        total_amount,
-      });
+    
+    const item = await Items.findOne({ where: { id: item_id } });
+    if (!item) {
+      const response = new ErrorResponse("Id Items Not Found", 404);
+      res.status(404).json(response);
     }
+    const total_amount = item.item_price * quantity
 
-    // Hitung total_order_price (total_order_amount + 10%)
-    const total_order_price = totalOrderAmount * 1.1;
+    const total_order_price = total_amount * 1.1
 
-    // Buat order
-    const newOrder = await Order.create({
+    const order = await Order.create({
       user_id,
+      quantity,
       status_order: "Pending",
       date_order_placed: dateFormat,
-      total_order_price,
+      total_order_price 
     });
 
-    // Tambahkan item ke order dengan kuantitas dan total_amount
-    for (const orderItem of orderItems) {
-      await newOrder.addItems(orderItem.item, {
-        through: { quantity: orderItem.quantity, total_amount: orderItem.total_amount },
-      });
-    }
-
-    const order = await newOrder.getItems();
-
-    res.status(201).json({
-      status: 201,
-      message: "Order created successfully",
-      Order: newOrder,
-      Order_Detail: order,
+    await order.addItems(item, {
+      through: {
+        quantity: quantity,
+        total_amount: total_amount,
+      },
     });
+
+    const response = new SuccessResponse(
+      "Order created successfully",
+      201,
+      order
+    );
+    res.status(201).json(response);
   } catch (error) {
     next(error);
   }
 }
 
-async function updateOrder(req, res, next) {
+async function orderSuccess(req, res, next) {
   try {
     const { order_id } = req.body;
     const updateOrder = await Order.findByPk(order_id);
     if (!updateOrder) {
-      return res.status(404).json({
-        status: 404,
-        message: "ORDER NOT FOUND",
-      });
+      const response = new ErrorResponse("Order Not Found!", 404)
+      return res.status(404).json(response);
     } else {
       updateOrder.date_order_paid = dateFormat
       updateOrder.status_order = "Success"
 
       await updateOrder.save();
-
-      res.status(200).json({
-        status: 200,
-        message: "ORDER UPDATE SUCCESS!",
-        data: updateOrder,
-      });
+      const response = new SuccessResponse("Order Update Success!", 200, updateOrder)
+      res.status(200).json(response);
     }
   } catch (error) {
     next(error);
@@ -117,18 +82,14 @@ async function getOrderDetails(req, res, next) {
     });
 
     if (!order) {
-      return res.status(404).json({
-        status: 404,
-        message: "Order not found",
-      });
+      const response = new ErrorResponse("Order Not Found!", 404);
+      return res.status(404).json(response);
     }
-    res.status(200).json({
-      status: 200,
-      Order: order,
-    });
+    const response = new SuccessResponse("Get Order Success!", 200, order);
+    res.status(200).json(response);
   } catch (error) {
     next(error);
   }
 }
 
-module.exports = { createOrder, updateOrder, getOrderDetails };
+module.exports = { createOrder, orderSuccess, getOrderDetails };

@@ -1,7 +1,7 @@
 const { Users, User_Details } = require("../models");
 const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-const JWT_SECRET = process.env.JWT_SECRET || "INI RAHASIA"
+const { SuccessResponse, ErrorResponse } = require("../middleware/handlerMiddleware");
+const { generateJwtToken } = require("../utils/jwt");
 
 
 async function register(req, res, next) {
@@ -19,60 +19,35 @@ async function register(req, res, next) {
     } = req.body;
 
     if (!email || !password) {
-      return res.status(400).json({
-        status:400,
-        message: "INPUT SETIDAKNYA EMAIL & PASSWORD!",
-      });
+      res.status(400).json(new ErrorResponse("Input Email & Password", 400));
     }
 
     //cek email
     const cekEmail = await Users.findOne({ where: { email } });
     if (cekEmail) {
-      return res.status(400).json({
-        status:400,
-        error: "EMAIL ALREADY IN USE!.",
-      });
+      res.status(409).json(new ErrorResponse("Email Already Exist!", 409));
     }
-
     //hash password
     const hashedPassword = await bcrypt.hash(password, 10);
-
     // Create user
-    const userData = await Users.create(
-      {
-        firstName,
-        lastName,
-        email,
-        phone,
-        password: hashedPassword,
-        user_detail: [
-          {
-            address,
-            city,
-            postal_code,
-            country_code,
-          },
-        ],
-      },
-      {
-        include: [
-          {
-            model: User_Details,
-            as: "user_detail",
-          },
-        ],
-      }
-    );
-    
-    const responseData = {
-      status: 201,
-      message: "USER CREATE SUCCESS.",
-      data: {
-        user: userData,
-      },
-    };
+    const user = await Users.create({
+      firstName,
+      lastName,
+      email,
+      phone,
+      password: hashedPassword,
+    });
+    await User_Details.create({
+      user_id: user.id,
+      address: address || null,
+      city: city || null,
+      postal_code: postal_code || null,
+      country_code: country_code || null,
+    });
 
-    res.status(201).json(responseData);
+    return res
+      .status(201)
+      .json(new SuccessResponse("User Create Success!!", 201, user));
   } catch (error) {
     next(error);
   }
@@ -83,39 +58,24 @@ async function login(req, res, next) {
     const { email, password } = req.body;
 
     //cekUser
-    const user = await Users.findOne({
-      where: {
-        email: email,
-      },
-    });
+    const user = await Users.findOne({ where: { email } });
     if (!user) {
-      return res.status(404).json({
-        status:404,
-        message: `USER: ${email} NOT FOUND!!`,
-      });
+      const response = new ErrorResponse("Email Not Found!", 404);
+      res.status(404).json(response)
     }
 
     // Cek Password
     const cekPassword = await bcrypt.compare(password, user.password);
     if (cekPassword) {
-      const payload = {
-        id: user.id,
-        email: user.email,
-      };
+      //create Token Jwt
+      const token = generateJwtToken(user)
 
-      const expiredIn = 60 * 60 * 1;
-      const token = jwt.sign(payload, JWT_SECRET, { expiresIn: expiredIn });
+      const response = new SuccessResponse("Login Succcess! 👏", 200, {token:token})
 
-      return res.status(200).json({
-        status:200,
-        message: "LOGIN SUCCESS!",
-        token: token,
-      });
+      return res.status(200).json(response);
     } else {
-      return res.status(402).json({
-        status:402,
-        message: "PASSWORD WRONG!!",
-      });
+      const response = new ErrorResponse("Incorrect Password! 👎", 401);
+      return res.status(401).json(response);
     }
   } catch (error) {
     next(error);

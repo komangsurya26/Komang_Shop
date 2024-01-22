@@ -2,6 +2,7 @@
 const {
   Model
 } = require('sequelize');
+const { ErrorResponse } = require('../middleware/handlerMiddleware');
 module.exports = (sequelize, DataTypes) => {
   class User_Details extends Model {
     /**
@@ -10,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-     
+
     }
   }
   User_Details.init(

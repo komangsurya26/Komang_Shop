@@ -30,7 +30,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:1990/update/v1",
+							"raw": "http://localhost:1990/update/v1/44",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -38,7 +38,8 @@
 							"port": "1990",
 							"path": [
 								"update",
-								"v1"
+								"v1",
+								"44"
 							]
 						}
 					},
@@ -68,7 +69,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:1990/updateDetail/v1",
+							"raw": "http://localhost:1990/updateDetail/v1/44",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -76,7 +77,8 @@
 							"port": "1990",
 							"path": [
 								"updateDetail",
-								"v1"
+								"v1",
+								"44"
 							]
 						}
 					},
@@ -89,7 +91,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"email\": \"adi@mail.com\",\n    \"password\": \"123\"\n}",
+							"raw": "{\n    \"email\": \"s@mail.com\",\n    \"password\": \"123\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -118,7 +120,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"firstName\": \"putu\",\n    \"lastName\": \"adi\",\n    \"phone\": \"0817346794\",\n    \"email\": \"adi@mail.com\",\n    \"password\": \"123\",\n    \"address\": \"bali\",\n    \"city\": \"tabanan\",\n    \"postal_code\": 8000,\n    \"country_code\": \"IDN\"\n}",
+							"raw": "{\n    \"firstName\": \"putu\",\n    \"lastName\": \"bobo\",\n    \"phone\": \"0817346794\",\n    \"email\": \"gusti@mail.com\",\n    \"password\": \"123\",\n    \"address\": \"\",\n    \"city\": \"\",\n    \"postal_code\": \"\",\n    \"country_code\": \"\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -152,7 +154,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:1990/delete/v1",
+							"raw": "http://localhost:1990/delete/v1/42",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -160,7 +162,8 @@
 							"port": "1990",
 							"path": [
 								"delete",
-								"v1"
+								"v1",
+								"42"
 							]
 						}
 					},
@@ -172,7 +175,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:1990/user/v1/7",
+							"raw": "http://localhost:1990/user/v1/44",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -181,7 +184,7 @@
 							"path": [
 								"user",
 								"v1",
-								"7"
+								"44"
 							]
 						}
 					},
@@ -287,7 +290,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:1990/update/item/v1/1",
+							"raw": "http://localhost:1990/update/item/v1/4",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -297,7 +300,7 @@
 								"update",
 								"item",
 								"v1",
-								"1"
+								"4"
 							]
 						}
 					},
@@ -330,7 +333,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:1990/delete/item/v1/3",
+							"raw": "http://localhost:1990/delete/item/v1/4",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -340,7 +343,7 @@
 								"delete",
 								"item",
 								"v1",
-								"3"
+								"4"
 							]
 						}
 					},
@@ -364,7 +367,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "[\n    {\n        \"item_id\": 9,\n        \"quantity\": 1\n    }\n]",
+							"raw": "{\n    \"item_id\": 10,\n    \"quantity\": 1\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -372,7 +375,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:1990/order/v1",
+							"raw": "http://localhost:1990/order/v1/11",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -380,7 +383,8 @@
 							"port": "1990",
 							"path": [
 								"order",
-								"v1"
+								"v1",
+								"11"
 							]
 						}
 					},
@@ -393,7 +397,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"order_id\": \"bcc89b92-0c2f-48f9-91f0-aae7e1aef56f\"\n}",
+							"raw": "{\n    \"order_id\": \"b502cd4b-ebf5-4885-a4d5-a4310b417657\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -447,7 +451,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"order_id\": \"bcc89b92-0c2f-48f9-91f0-aae7e1aef56f\"\n}",
+							"raw": "{\n    \"order_id\": \"b502cd4b-ebf5-4885-a4d5-a4310b417657\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"

@@ -11,10 +11,11 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       Users.hasOne(models.User_Details, {
-        foreignKey: "user_id",
+        foreignKey: "user_id", // Ini mengacu ke kolom user_id di table User_details
+        sourceKey: "id", // Ini mengacu ke kolom id di table Users
         as: "user_detail",
         onDelete: "CASCADE",
-        onUpdate: "CASCADE"
+        onUpdate: "CASCADE",
       });
     }
   }

@@ -1,3 +1,4 @@
+const { ErrorResponse, SuccessResponse } = require("../middleware/handlerMiddleware");
 const { Items } = require("../models");
 
 async function createItem(req, res, next) {
@@ -12,26 +13,24 @@ async function createItem(req, res, next) {
       item_size,
     } = req.body;
     if (!item_name || !item_price || !item_image) {
-      res.status(400).json({
-        status: 400,
-        message: "INPUT SETIDAKNYA NAME,PRICE,IMAGE!!",
-      });
-    } else {
-      const createdItem = await Items.create({
-        item_name,
-        item_price,
-        item_image,
-        item_size,
-        item_stock,
-        item_description,
-        item_color,
-      });
-      res.status(201).json({
-        status: 201,
-        message: "CREATE ITEM SUCCESS!",
-        item: createdItem,
-      });
+      const response = new ErrorResponse("Input Name, Price and Image 🙏", 400);
+      res.status(400).json(response);
     }
+    const createdItems = await Items.create({
+      item_name,
+      item_price,
+      item_image,
+      item_size,
+      item_stock,
+      item_description,
+      item_color,
+    });
+    const response = new SuccessResponse(
+      "CREATE ITEM SUCCESS!",
+      201,
+      createdItems
+    );
+    res.status(201).json(response)
   } catch (error) {
     next(error);
   }
@@ -39,18 +38,7 @@ async function createItem(req, res, next) {
 
 async function updateItem(req, res, next) {
   try {
-    const { id } = req.params;
-    const data = await Items.findOne({
-      where: {
-        id,
-      },
-    });
-    if (!data) {
-      res.status(404).json({
-        status: 404,
-        message: "DATA NOT FOUND!",
-      });
-    }
+    const id  = +req.params.id;
     const {
       item_name,
       item_price,
@@ -60,6 +48,15 @@ async function updateItem(req, res, next) {
       item_color,
       item_size,
     } = req.body;
+    const data = await Items.findOne({
+      where: {
+        id,
+      },
+    });
+    if (!data) {
+      const response = new ErrorResponse("DATA NOT FOUND!", 404);
+      res.status(404).json(response);
+    }
     data.item_name = item_name || data.item_name;
     data.item_price = item_price || data.item_price;
     data.item_image = item_image || data.item_image;
@@ -70,11 +67,8 @@ async function updateItem(req, res, next) {
 
     await data.save();
 
-    res.status(200).json({
-      status: 200,
-      message: "ITEM UPDATE SUCCESS!",
-      data: data,
-    });
+    const response = new SuccessResponse("ITEM UPDATE SUCCESS!", 200, data);
+    res.status(200).json(response);
   } catch (error) {
     next(error);
   }
@@ -82,22 +76,18 @@ async function updateItem(req, res, next) {
 
 async function getItem(req, res, next) {
   try {
-    const { id } = req.params;
+    const id  = +req.params.id;
     const item = await Items.findOne({
       where: {
         id,
       },
     });
     if (!item) {
-      res.status(404).json({
-        status: 404,
-        message: "DATA NOT FOUND!",
-      });
+      const response = new ErrorResponse("DATA NOT FOUND!",404)
+      res.status(404).json(response);
     }
-    res.status(200).json({
-      status: 200,
-      data: item,
-    });
+    const response = new SuccessResponse("Get Item Success", 200, item);
+    res.status(200).json(response);
   } catch (error) {
     next(error);
   }
@@ -106,10 +96,8 @@ async function getItem(req, res, next) {
 async function getAllItem(req, res, next) {
   try {
     const data = await Items.findAll();
-    res.status(200).json({
-      status: 200,
-      data: data,
-    });
+    const response = new SuccessResponse("Get item all success", 200, data)
+    res.status(200).json(response);
   } catch (error) {
     next(error);
   }
@@ -124,16 +112,13 @@ async function deleteItem(req, res, next) {
       },
     });
     if (!item) {
-      return res.status(404).json({
-        status: 404,
-        message: "ITEM NOT FOUND or ALREADY DELETED.",
-      });
+      const response = new ErrorResponse(
+        "ITEM NOT FOUND or ALREADY DELETED.",
+        404
+      );
+      return res.status(404).json(response)
     }
-    await item.destroy();
-    res.status(200).json({
-      status: 200,
-      message: "DELETE SUCCESS!",
-    });
+    res.status(200).json(new SuccessResponse("Delete Success", 200));
   } catch (error) {
     next(error);
   }
