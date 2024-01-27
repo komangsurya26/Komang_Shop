@@ -1,4 +1,4 @@
-const { SuccessResponse, ErrorResponse } = require("../middleware/handlerMiddleware");
+const { SuccessResponse, ErrorResponse } = require("../utils/respons");
 const { Users, User_Details } = require("../models");
 const bcrypt = require("bcrypt");
 
