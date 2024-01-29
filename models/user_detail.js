@@ -2,7 +2,6 @@
 const {
   Model
 } = require('sequelize');
-const { ErrorResponse } = require('../middleware/handlerMiddleware');
 module.exports = (sequelize, DataTypes) => {
   class User_Details extends Model {
     /**
