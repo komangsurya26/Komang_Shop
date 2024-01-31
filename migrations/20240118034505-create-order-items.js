@@ -17,6 +17,7 @@ module.exports = {
             key: "id",
           },
           type: Sequelize.UUID,
+          onDelete: "CASCADE",
           defaultValue: Sequelize.UUIDV4,
         },
         item_id: {
@@ -25,6 +26,7 @@ module.exports = {
             key: "id",
           },
           type: Sequelize.INTEGER,
+          onDelete: "SET NULL",
         },
         quantity: {
           type: Sequelize.INTEGER,

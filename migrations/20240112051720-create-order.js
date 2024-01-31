@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
@@ -17,6 +17,7 @@ module.exports = {
             key: "id",
           },
           type: Sequelize.INTEGER,
+          onDelete: "SET NULL",
         },
         total_order_price: {
           type: Sequelize.DECIMAL,
@@ -29,7 +30,7 @@ module.exports = {
         },
         date_order_paid: {
           type: Sequelize.STRING,
-        }
+        },
       },
       {
         timestamps: false,
@@ -37,6 +38,6 @@ module.exports = {
     );
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Orders');
-  }
+    await queryInterface.dropTable("Orders");
+  },
 };
