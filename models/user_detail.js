@@ -21,8 +21,8 @@ module.exports = (sequelize, DataTypes) => {
           key: "id",
         },
         type: DataTypes.INTEGER,
-        onDelete: "CASCADE",
-        onUpdate: "CASCADE",
+        onDelete: "CASCADE", //jika pk user di tabel user dihapus maka user_id di tabel ini juga dihapus/bercermin
+        onUpdate: "CASCADE", //jika pk user di tabel user diubah maka user_id di tabel ini juga berubah/bercermin
       },
       address: DataTypes.STRING,
       city: DataTypes.STRING,

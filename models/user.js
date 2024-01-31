@@ -13,9 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       Users.hasOne(models.User_Details, {
         foreignKey: "user_id", // Ini mengacu ke kolom user_id di table User_details
         sourceKey: "id", // Ini mengacu ke kolom id di table Users
-        as: "user_detail",
-        onDelete: "CASCADE",
-        onUpdate: "CASCADE",
+        as: "user_detail"
       });
     }
   }

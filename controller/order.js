@@ -43,16 +43,17 @@ async function createOrder(req, res, next) {
 
     await order.addItems(item, {
       through: { quantity, total_amount },
-      transaction
+      transaction,
     });
 
     const responseOrder = await Order.findByPk(order.id, {
       include: {
         model: Items,
-        as: 'items',
+        as: "items",
+        attributes: { exclude: ["createdAt", "updatedAt"] }, //untuk menambahkan pengecualian dalam colom tersebut
         through: {
-          as:'order_items',
-          attributes: ['quantity', 'total_amount']
+          as: "order_items",
+          attributes: ["quantity", "total_amount"],
         },
       },
       transaction,
@@ -71,7 +72,6 @@ async function createOrder(req, res, next) {
     next(error);
   }
 }
-
 
 async function orderSuccess(req, res, next) {
   try {

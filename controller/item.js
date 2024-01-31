@@ -105,20 +105,21 @@ async function getAllItem(req, res, next) {
 
 async function deleteItem(req, res, next) {
   try {
-    const { id } = req.params;
-    const item = await Items.findOne({
+    const id = +req.params.id;
+    const item = await Items.findByPk(id);
+
+    if (!item) {
+      const response = new ErrorResponse("ITEM NOT FOUND or ALREADY DELETED.", 404);
+      return res.status(404).json(response);
+    }
+
+    await Items.destroy({
       where: {
-        id,
+        id: id,
       },
     });
-    if (!item) {
-      const response = new ErrorResponse(
-        "ITEM NOT FOUND or ALREADY DELETED.",
-        404
-      );
-      return res.status(404).json(response)
-    }
-    res.status(200).json(new SuccessResponse("Delete Success", 200));
+
+    return res.status(200).json(new SuccessResponse("Delete Success", 200));
   } catch (error) {
     next(error);
   }

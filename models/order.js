@@ -28,6 +28,7 @@ module.exports = (sequelize, DataTypes) => {
           key: "id",
         },
         type: DataTypes.INTEGER,
+        onDelete: "SET NULL" // jika user_id dari pk user di hapus maka berubah menjadi null
       },
       total_order_price: DataTypes.DECIMAL,
       status_order: DataTypes.STRING,

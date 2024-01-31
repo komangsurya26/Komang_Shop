@@ -21,6 +21,7 @@ module.exports = (sequelize, DataTypes) => {
           key: "id",
         },
         type: DataTypes.UUID,
+        onDelete: "CASCADE",
         defaultValue: DataTypes.UUIDV4,
       },
       item_id: {
@@ -29,6 +30,7 @@ module.exports = (sequelize, DataTypes) => {
           key: "id",
         },
         type: DataTypes.INTEGER,
+        onDelete: "SET NULL",
       },
       quantity: DataTypes.INTEGER,
       total_amount: DataTypes.DECIMAL,
