@@ -1,8 +1,6 @@
 const { sequelize } = require("../models/index");
 const { SuccessResponse, ErrorResponse } = require("../utils/respons");
 const { Users, Order, Items } = require("../models");
-const { getFormattedDate } = require("../utils/date");
-const dateNow = getFormattedDate();
 
 async function createOrder(req, res, next) {
   const transaction = await sequelize.transaction();
@@ -35,7 +33,6 @@ async function createOrder(req, res, next) {
         user_id,
         quantity,
         status_order: "Pending",
-        date_order_placed: dateNow,
         total_order_price,
       },
       { transaction }
@@ -50,7 +47,7 @@ async function createOrder(req, res, next) {
       include: {
         model: Items,
         as: "items",
-        attributes: { exclude: ["createdAt", "updatedAt"] }, //untuk menambahkan pengecualian dalam colom tersebut
+        attributes: { exclude: ["created_at", "updated_at"] }, //untuk menambahkan pengecualian dalam colom tersebut
         through: {
           as: "order_items",
           attributes: ["quantity", "total_amount"],
@@ -76,12 +73,11 @@ async function createOrder(req, res, next) {
 async function orderSuccess(req, res, next) {
   try {
     const { order_id } = req.body;
-    const updateOrder = await Order.findByPk(order_id);
+    const updateOrder = await Order.findOne({ where: { id: order_id } });
     if (!updateOrder) {
       const response = new ErrorResponse("Order Not Found!", 404);
       return res.status(404).json(response);
     } else {
-      updateOrder.date_order_paid = dateNow;
       updateOrder.status_order = "Success";
 
       await updateOrder.save();
@@ -105,7 +101,12 @@ async function getOrderDetails(req, res, next) {
     const order = await Order.findByPk(order_id, {
       include: {
         model: Items,
-        through: { attributes: ["quantity", "total_amount"] },
+        as: "items",
+        attributes: { exclude: ["created_at", "updated_at"] },
+        through: {
+          as: "order_items",
+          attributes: ["quantity", "total_amount"],
+        },
       },
     });
 

@@ -1,5 +1,7 @@
 'use strict';
 
+const { getFormattedDate } = require('../utils/date');
+
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
@@ -14,8 +16,8 @@ module.exports = {
              "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Architecto magnam ad quos provident impedit. Deserunt asperiores, nulla, in ipsa libero tenetur magnam eum harum nihil repudiandae, expedita doloribus inventore sed.",
            item_stock: "201",
            item_price: "32000000",
-           createdAt: new Date(),
-           updatedAt: new Date(),
+           created_at: getFormattedDate(),
+           updated_at: getFormattedDate(),
          },
          {
            item_name: "Motor Honda PCX",
@@ -25,8 +27,8 @@ module.exports = {
              "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Architecto magnam ad quos provident impedit. Deserunt asperiores, nulla, in ipsa libero tenetur magnam eum harum nihil repudiandae, expedita doloribus inventore sed.",
            item_stock: "90",
            item_price: "30000000",
-           createdAt: new Date(),
-           updatedAt: new Date(),
+           created_at: getFormattedDate(),
+           updated_at: getFormattedDate(),
          },
          {
            item_name: "Motor Honda Scoopy",
@@ -36,8 +38,8 @@ module.exports = {
              "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Architecto magnam ad quos provident impedit. Deserunt asperiores, nulla, in ipsa libero tenetur magnam eum harum nihil repudiandae, expedita doloribus inventore sed.",
            item_stock: "40",
            item_price: "20000000",
-           createdAt: new Date(),
-           updatedAt: new Date(),
+           created_at: getFormattedDate(),
+           updated_at: getFormattedDate(),
          },
          {
            item_name: "Motor Vespa Sprint",
@@ -47,8 +49,8 @@ module.exports = {
              "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Architecto magnam ad quos provident impedit. Deserunt asperiores, nulla, in ipsa libero tenetur magnam eum harum nihil repudiandae, expedita doloribus inventore sed.",
            item_stock: "100",
            item_price: "50000000",
-           createdAt: new Date(),
-           updatedAt: new Date(),
+           created_at: getFormattedDate(),
+           updated_at: getFormattedDate(),
          },
        ],
        {}

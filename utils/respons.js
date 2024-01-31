@@ -1,18 +1,18 @@
 // customError.js
 class ErrorResponse {
-  constructor(message, statusCode, data) {
+  constructor(message, status_code, data) {
     this.success = false;
     this.message = message;
-    this.statusCode = statusCode;
+    this.status_code = status_code;
     this.data = data || null;
   }
 }
 
 class SuccessResponse {
-  constructor(message, statusCode, data) {
+  constructor(message, status_code, data) {
     this.success = true;
     this.message = message;
-    this.statusCode = statusCode;
+    this.status_code = status_code;
     this.data = data;
   }
 }

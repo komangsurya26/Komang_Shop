@@ -1,5 +1,6 @@
 "use strict";
 const { Model } = require("sequelize");
+const { getFormattedDate } = require("../utils/date");
 module.exports = (sequelize, DataTypes) => {
   class Order extends Model {
     /**
@@ -28,7 +29,7 @@ module.exports = (sequelize, DataTypes) => {
           key: "id",
         },
         type: DataTypes.INTEGER,
-        onDelete: "SET NULL" // jika user_id dari pk user di hapus maka berubah menjadi null
+        onDelete: "SET NULL", // jika user_id dari pk user di hapus maka berubah menjadi null
       },
       total_order_price: DataTypes.DECIMAL,
       status_order: DataTypes.STRING,
@@ -39,6 +40,14 @@ module.exports = (sequelize, DataTypes) => {
       timestamps: false,
       sequelize,
       modelName: "Order",
+      hooks: {
+        beforeCreate: (order, options) => {
+          order.date_order_placed = getFormattedDate();
+        },
+        beforeUpdate: (order, options) => {
+          order.date_order_paid = getFormattedDate();
+        },
+      },
     }
   );
   return Order;

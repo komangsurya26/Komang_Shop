@@ -7,8 +7,8 @@ const { generateJwtToken } = require("../utils/jwt");
 async function register(req, res, next) {
   try {
     const {
-      firstName,
-      lastName,
+      first_name,
+      last_name,
       email,
       password,
       phone,
@@ -31,8 +31,8 @@ async function register(req, res, next) {
     const hashedPassword = await bcrypt.hash(password, 10);
     // Create user
     const user = await Users.create({
-      firstName,
-      lastName,
+      first_name,
+      last_name,
       email,
       phone,
       password: hashedPassword,

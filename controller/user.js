@@ -27,6 +27,9 @@ async function getOne(req, res, next) {
       where: { id },
       include: [{ model: User_Details, as: "user_detail" }],
     });
+    if (!user) {
+      res.status(404).json(new ErrorResponse("User Not Found",404))
+    }
     res.status(200).json(new SuccessResponse("Get User Success",200,user))
   } catch (error) {
     next(error)
@@ -38,8 +41,8 @@ async function update(req, res, next) {
   try {
     const id = +req.params.id;
     const {
-      firstName,
-      lastName,
+      first_name,
+      last_name,
       email,
       password,
       phone,
@@ -53,8 +56,8 @@ async function update(req, res, next) {
       return res.status(404).json(response);
     }
 
-    user.firstName = firstName || user.firstName;
-    user.lastName = lastName || user.lastName;
+    user.first_name = first_name || user.first_name;
+    user.last_name = last_name || user.last_name;
     user.email = email || user.email;
     user.password = password ? await bcrypt.hash(password, 10) : user.password;
     user.phone = phone || user.phone;

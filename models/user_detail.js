@@ -2,6 +2,7 @@
 const {
   Model
 } = require('sequelize');
+const { getFormattedDate } = require('../utils/date');
 module.exports = (sequelize, DataTypes) => {
   class User_Details extends Model {
     /**
@@ -28,10 +29,26 @@ module.exports = (sequelize, DataTypes) => {
       city: DataTypes.STRING,
       postal_code: DataTypes.STRING,
       country_code: DataTypes.STRING,
+      created_at: {
+        type: DataTypes.STRING,
+      },
+      updated_at: {
+        type: DataTypes.STRING,
+      },
     },
     {
       sequelize,
       modelName: "User_Details",
+      timestamps: false,
+      hooks: {
+        beforeCreate: (user, options) => {
+          user.created_at = getFormattedDate();
+          user.updated_at = getFormattedDate();
+        },
+        beforeUpdate: (user, options) => {
+          user.updated_at = getFormattedDate();
+        },
+      },
     }
   );
   return User_Details;
