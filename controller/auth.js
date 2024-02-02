@@ -1,8 +1,14 @@
 const { Users, User_Details } = require("../models");
+const fs = require("fs");
 const bcrypt = require("bcrypt");
-const { SuccessResponse, ErrorResponse } = require("../utils/respons");
-const { generateJwtToken } = require("../utils/jwt");
 
+const { SuccessResponse, ErrorResponse } = require("../utils/respons");
+const { generateJwtToken } = require("../modules/jwt");
+const { sendEmail } = require("../modules/sendinblue");
+const { randomToken } = require("../utils/uuid");
+
+//view verifyEmail
+const viewVerify = fs.readFileSync("other/html/email.html", "utf8");
 
 async function register(req, res, next) {
   try {
@@ -36,6 +42,7 @@ async function register(req, res, next) {
       email,
       phone,
       password: hashedPassword,
+      token_verify: randomToken(),
     });
     await User_Details.create({
       user_id: user.id,
@@ -45,9 +52,29 @@ async function register(req, res, next) {
       country_code: country_code || null,
     });
 
+    //link verification
+    const verificationLink = `http://localhost:1990/verify/v1?token=${user.token_verify}`;
+
+    //view verifikasi to email
+    const htmlContent = viewVerify.replace(
+      "{{verificationLink}}",
+      verificationLink
+    );
+
+    //send email
+    await sendEmail(email, {
+      subject: "Verification Link ✔︎",
+      htmlContent: htmlContent,
+    });
+
     return res
-      .status(201)
-      .json(new SuccessResponse("User Create Success!!", 201, user));
+      .status(200)
+      .json(
+        new SuccessResponse("Cek Your Email For Verify!!", 200, {
+          name: first_name,
+          email,
+        })
+      );
   } catch (error) {
     next(error);
   }
@@ -61,16 +88,21 @@ async function login(req, res, next) {
     const user = await Users.findOne({ where: { email } });
     if (!user) {
       const response = new ErrorResponse("Email Not Found!", 404);
-      res.status(404).json(response)
+      res.status(404).json(response);
+    } else if (user.verify === false) {
+      const response = new ErrorResponse("Please Verify Your Email!", 400);
+      res.status(400).json(response);
     }
 
     // Cek Password
     const cekPassword = await bcrypt.compare(password, user.password);
     if (cekPassword) {
       //create Token Jwt
-      const token = generateJwtToken(user)
+      const token = generateJwtToken(user);
 
-      const response = new SuccessResponse("Login Succcess! 👏", 200, {token:token})
+      const response = new SuccessResponse("Login Succcess! 👏", 200, {
+        token: token,
+      });
 
       return res.status(200).json(response);
     } else {
@@ -82,4 +114,30 @@ async function login(req, res, next) {
   }
 }
 
-module.exports = { register, login };
+async function verifyEmail(req, res, next) {
+  try {
+    const { token } = req.query;
+
+    const user = await Users.findOne({
+      where: {
+        token_verify: token,
+      },
+      attributes: ["id"],
+    });
+
+    if (!user) {
+      const response = new ErrorResponse("Token Not Valid 👎", 404);
+      return res.status(404).json(response);
+    }
+    user.verify = true;
+    user.token_verify = null;
+    user.save();
+
+    const response = new SuccessResponse("Email Veerified 🎉🎉🎉", 200, user);
+    return res.status(200).json(response);
+  } catch (error) {
+    next(error);
+  }
+}
+
+module.exports = { register, login, verifyEmail };

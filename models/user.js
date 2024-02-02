@@ -42,6 +42,12 @@ module.exports = (sequelize, DataTypes) => {
       updated_at: {
         type: DataTypes.STRING,
       },
+      token_verify:{
+        type: DataTypes.STRING
+      },
+      verify:{
+        type: DataTypes.BOOLEAN
+      }
     },
     {
       sequelize,
@@ -51,6 +57,7 @@ module.exports = (sequelize, DataTypes) => {
         beforeCreate: (user, options) => {
           user.created_at = getFormattedDate();
           user.updated_at = getFormattedDate();
+          
         },
         beforeUpdate: (user, options) => {
           user.updated_at = getFormattedDate();
