@@ -9,6 +9,7 @@ This documentation provides an overview of the key functionalities and endpoints
 `POST /register/v1`
 
 Body
+```
     {
         "first_name": "string",
         "last_name": "string",
@@ -20,6 +21,7 @@ Body
         "postal_code": "string",
         "country_code": "string"
     }
+```
 
 Headers
     {
