@@ -4,7 +4,7 @@ This documentation provides an overview of the key functionalities and endpoints
 
 ## Register
 
-### Request
+***Request***
 
 `POST /register/v1`
 
@@ -30,7 +30,7 @@ Header
 }
 ```
 
-### Response (200 - OK)
+***Response (200 - OK)***
 
 ```
 {
@@ -44,7 +44,7 @@ Header
 }
 ```
 
-### Response (400 - BAD REQUEST)
+***Response (400 - BAD REQUEST)***
 
 ```
 {
@@ -55,7 +55,7 @@ Header
 }
 ```
 
-### Response (409 - CONFLICT)
+***Response (409 - CONFLICT)***
 
 ```
 {
@@ -66,7 +66,7 @@ Header
 }
 ```
 
-### Response (400 - BAD REQUEST)
+***Response (400 - BAD REQUEST)***
 
 ```
 {
@@ -79,7 +79,7 @@ Header
 
 ## Login
 
-### Request
+***Request***
 
 `POST /login/v1`
 
