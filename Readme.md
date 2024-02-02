@@ -217,6 +217,59 @@ Header
 }
 ```
 
+## Insert Item
+
+***Request***
+
+`POST /create/item/v1`
+
+Params
+```
+{
+    Not Need
+}
+```
+
+Body
+```
+{
+    "item_name": "string",
+    "item_image": "string",
+    "item_description": "string",
+    "item_stock": number,
+    "item_price": number
+}
+```
+
+Header
+```
+{
+    Not Need
+}
+```
+
+***Response (201 - Created)***
+
+```
+{
+    "success": true,
+    "message": "CREATE ITEM SUCCESS!",
+    "status_code": 201,
+    "data": {
+        "id": 5,
+        "item_name": "string",
+        "item_price": "string",
+        "item_image": "string",
+        "item_stock": number,
+        "item_description": "string",
+        "created_at": "2024-02-02 22:32:9",
+        "updated_at": "2024-02-02 22:32:9"
+    }
+}
+```
+
+
+
 
 
 
