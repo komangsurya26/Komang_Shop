@@ -98,7 +98,7 @@ Header
 }
 ```
 
-### Response (200 - OK)
+***Response (200 - OK)***
 
 ```
 {
@@ -110,8 +110,7 @@ Header
     }
 }
 ```
-
-### Response (404 - NOT FOUND)
+***Response (404 - NOT FOUND)***
 Your Email Not Found At System
 
 ```
@@ -123,7 +122,7 @@ Your Email Not Found At System
 }
 ```
 
-### Response (400 - BAD REQUEST)
+***Response (400 - BAD REQUEST)***
 You Must Verify Your Email And Login Again
 
 ```
@@ -135,7 +134,7 @@ You Must Verify Your Email And Login Again
 }
 ```
 
-### Response (401 - Unauthorized)
+***Response (401 - Unauthorized)***
 Your Password Wrong
 
 ```
