@@ -146,6 +146,80 @@ Your Password Wrong
 }
 ```
 
+## Create Order
+
+***Request***
+
+`POST /order/v1/:user_id`
+
+Params
+```
+{
+    "user_id": number
+}
+```
+
+Body
+```
+{
+    "item_id": number,
+    "quantity": number
+}
+```
+
+Header
+```
+{
+    Authorization : token
+}
+```
+
+***Response (201 - Created)***
+
+```
+{
+    "success": true,
+    "message": "Order created successfully",
+    "status_code": 201,
+    "data": {
+        "id": "string",
+        "user_id": number,
+        "total_order_price": "string",
+        "status_order": "string",
+        "date_order_placed": "2024-02-02 22:18:13",
+        "date_order_paid": null,
+        "items": [
+            {
+                "id": number,
+                "item_name": "string",
+                "item_image": "string",
+                "item_description": "string",
+                "item_stock": number,
+                "item_price": "string",
+                "order_items": {
+                    "quantity": number,
+                    "total_amount": "string"
+                }
+            }
+        ]
+    }
+}
+```
+
+***Response (404 - Not Found)***
+
+```
+{
+    "success": false,
+    "message": "Item Not Found",
+    "status_code": 404,
+    "data": null
+}
+```
+
+
+
+
 
 
 
