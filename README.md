@@ -6,6 +6,8 @@
 * [![Express][Express.js]][Express-url]
 * [![Sequelize][Sequelize]][Sequelize-url]
 * [![Jest][Jest]][Jest-url]
+* [![Docker][Docker]][Docker-url]
+* [![Socket][Socket]][Socket-url]
 
 
 ***Step to Start Project***
@@ -40,4 +42,7 @@ npm start
 [Sequelize-url]: https://sequelize.org/
 [Jest]: https://img.shields.io/badge/jest-EE1B23?style=for-the-badge&logo=jest
 [Jest-url]: https://jestjs.io/
- 
+[Docker]: https://img.shields.io/badge/docker-%232496ED?style=for-the-badge&logo=docker&logoColor=white
+[Docker-url]: https://www.docker.com/
+[Socket]: https://img.shields.io/badge/socket.io-%23010101?style=for-the-badge&logo=socketdotio&logoColor=white
+[Socket-url]: https://socket.io/
