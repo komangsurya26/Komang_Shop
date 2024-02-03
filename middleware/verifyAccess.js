@@ -18,19 +18,5 @@ async function verifyAccesToken(req, res, next) {
   }
 }
 
-async function verifyAccesAdmin(req, res, next) {
-  try {
-    const admin = req.user.isAdmin;
-    if (admin === false) {
-      return res.status(403).json({
-        status:403,
-        error: "You are not admin!!",
-      });
-    }
-    next();
-  } catch (error) {
-    next(error);
-  }
-}
 
-module.exports = { verifyAccesToken, verifyAccesAdmin };
+module.exports = { verifyAccesToken };

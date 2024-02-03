@@ -6,9 +6,10 @@ const { SuccessResponse, ErrorResponse } = require("../utils/respons");
 const { generateJwtToken } = require("../modules/jwt");
 const { sendEmail } = require("../modules/sendinblue");
 const { randomToken } = require("../utils/uuid");
+const { formatEmail } = require("../utils/emailValidation");
 
 //view verifyEmail
-const viewVerify = fs.readFileSync("other/html/email.html", "utf8");
+const viewVerify = fs.readFileSync("view/email/verifyEmail.html", "utf8");
 
 async function register(req, res, next) {
   try {
@@ -25,13 +26,18 @@ async function register(req, res, next) {
     } = req.body;
 
     if (!email || !password) {
-      res.status(400).json(new ErrorResponse("Input Email & Password", 400));
+      return res.status(400).json(new ErrorResponse("Input Email & Password", 400));
     }
 
-    //cek email
+    //ceking format email 
+    if (!formatEmail(email)) {
+      return res.status(400).json(new ErrorResponse("Invalid email format", 400));
+    }
+
+    //find email
     const cekEmail = await Users.findOne({ where: { email } });
     if (cekEmail) {
-      res.status(409).json(new ErrorResponse("Email Already Exist!", 409));
+      return res.status(409).json(new ErrorResponse("Email Already Exist!", 409));
     }
     //hash password
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -88,10 +94,10 @@ async function login(req, res, next) {
     const user = await Users.findOne({ where: { email } });
     if (!user) {
       const response = new ErrorResponse("Email Not Found!", 404);
-      res.status(404).json(response);
+      return res.status(404).json(response);
     } else if (user.verify === false) {
       const response = new ErrorResponse("Please Verify Your Email!", 400);
-      res.status(400).json(response);
+      return res.status(400).json(response);
     }
 
     // Cek Password

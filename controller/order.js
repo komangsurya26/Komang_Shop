@@ -9,25 +9,34 @@ async function createOrder(req, res, next) {
     const user_id = +req.params.user_id;
     const { item_id, quantity } = req.body;
 
+    // Check if quantity is valid
+    if (!quantity || quantity <= 0) {
+      const response = new ErrorResponse("Please input a valid quantity!", 400);
+      return res.status(400).json(response);
+    }
+
+    // Find User
     const findUser = await Users.findByPk(user_id, { transaction });
     if (!findUser) {
-      const response = new ErrorResponse("User Not Found!", 404);
-      res.status(404).json(response);
-      await transaction.rollback();
-      return;
+      return res.status(404).json(new ErrorResponse("User Not Found!", 404));
     }
 
-    const item = await Items.findOne({ where: { id: item_id }, transaction });
+    // Find Item
+    const item = await Items.findByPk(item_id, { transaction });
     if (!item) {
-      const response = new ErrorResponse("Item Not Found", 404);
-      res.status(404).json(response);
-      await transaction.rollback();
-      return;
+      return res.status(404).json(new ErrorResponse("Item Not Found", 404));
     }
 
+    // Check if item is out of stock
+    if (item.item_stock === 0 || quantity > item.item_stock) {
+      return res.status(400).json(new ErrorResponse("Item out of stock", 400));
+    }
+
+    // Calculate total order_price
     const total_amount = item.item_price * quantity;
     const total_order_price = total_amount * 1.1;
 
+    // Create order
     const order = await Order.create(
       {
         user_id,
@@ -38,24 +47,31 @@ async function createOrder(req, res, next) {
       { transaction }
     );
 
+    // Update stock
+    const updatedStock = item.item_stock - quantity;
+    await item.update({ item_stock: updatedStock }, { transaction });
+
+    // Add quantity and total amount to the response
     await order.addItems(item, {
       through: { quantity, total_amount },
       transaction,
     });
 
+    // Response order
     const responseOrder = await Order.findByPk(order.id, {
       include: {
         model: Items,
         as: "items",
-        attributes: { exclude: ["created_at", "updated_at"] }, //untuk menambahkan pengecualian dalam colom tersebut
+        attributes: ["item_name", "item_image","item_price"],
         through: {
           as: "order_items",
-          attributes: ["quantity", "total_amount"],
+          attributes: { exclude: ["order_id", "item_id"] },
         },
       },
       transaction,
     });
 
+    // Commit transaction
     await transaction.commit();
 
     const response = new SuccessResponse(
@@ -63,12 +79,14 @@ async function createOrder(req, res, next) {
       201,
       responseOrder
     );
-    res.status(201).json(response);
+
+    return res.status(201).json(response);
   } catch (error) {
     await transaction.rollback();
     next(error);
   }
 }
+
 
 async function orderSuccess(req, res, next) {
   try {
@@ -102,7 +120,7 @@ async function getOrderDetails(req, res, next) {
       include: {
         model: Items,
         as: "items",
-        attributes: { exclude: ["created_at", "updated_at"] },
+        attributes: ["item_name", "item_price", "item_image"],
         through: {
           as: "order_items",
           attributes: ["quantity", "total_amount"],
