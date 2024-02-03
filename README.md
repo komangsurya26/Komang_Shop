@@ -1,5 +1,3 @@
-## KOMANG SHOP
-
 ## Technology Which I Used
 
 * [![NodeJS][Node.js]][Node-url]
@@ -16,19 +14,19 @@
  ```
  git clone https://github.com/komangsurya26/Komang_Shop.git
  ```
- 2. 
+ 2. Install Dependency
  ```
  npm install
  ```
- 3. 
+ 3. Create New Database
  ```
 npx sequelize-cli db:create
  ```
- 4. 
+ 4. Migrate Model Database
  ```
 npx sequelize-cli db:migrate
  ```
- 5. 
+ 5. Start
  ```
 npm start
  ```
