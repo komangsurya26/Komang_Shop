@@ -31,7 +31,7 @@ npm start
  ```
 
 
-[Node.js]:https://img.shields.io/badge/NodeJs-green?style=flat-square&logo=nodedotjs
+[Node.js]:https://img.shields.io/badge/NodeJs-green?style=for-the-badge&logo=nodedotjs
 [Node-url]: https://nodejs.org/en
 [React.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
 [React-url]: https://reactjs.org/
