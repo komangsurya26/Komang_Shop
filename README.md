@@ -33,6 +33,10 @@ npx sequelize-cli db:migrate
 npm start
  ```
 
+## Usage
+
+_For more examples, please refer to the [Documentation](https://github.com/komangsurya26/Komang_Shop/blob/master/document.md)_
+
 
 [Node.js]:https://img.shields.io/badge/NodeJs-green?style=for-the-badge&logo=nodedotjs
 [Node-url]: https://nodejs.org/en
