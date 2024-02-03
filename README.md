@@ -1,13 +1,14 @@
 ## KOMANG SHOP
 
-## Technology Which I Used
+***Technology Which I Used***
 
 * [![NodeJS][Node.js]][Node-url]
-* [![React][React.js]][React-url]
-* [![Vue][Vue.js]][Vue-url]
+* [![Express][Express.js]][Express-url]
+* [![Sequelize][Sequelize]][Sequelize-url]
+* [![Jest][Jest]][Jest-url]
 
 
-## Step to Start Project
+***Step to Start Project***
 
  1. Clone Project
  ```
@@ -33,8 +34,10 @@ npm start
 
 [Node.js]:https://img.shields.io/badge/NodeJs-green?style=for-the-badge&logo=nodedotjs
 [Node-url]: https://nodejs.org/en
-[React.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
-[React-url]: https://reactjs.org/
-[Vue.js]: https://img.shields.io/badge/Vue.js-35495E?style=for-the-badge&logo=vuedotjs&logoColor=4FC08D
-[Vue-url]: https://vuejs.org/
+[Express.js]: https://img.shields.io/badge/Express-black?style=for-the-badge&logo=express
+[Express-url]: https://expressjs.com/
+[Sequelize]: https://img.shields.io/badge/Sequelize-F5F8FA?style=for-the-badge&logo=sequelize
+[Sequelize-url]: https://sequelize.org/
+[Jest]: https://img.shields.io/badge/jest-EE1B23?style=for-the-badge&logo=jest
+[Jest-url]: https://jestjs.io/
  
