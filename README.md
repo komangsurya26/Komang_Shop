@@ -1,6 +1,6 @@
 ## KOMANG SHOP
 
-***Technology Which I Used***
+## Technology Which I Used
 
 * [![NodeJS][Node.js]][Node-url]
 * [![Express][Express.js]][Express-url]
@@ -10,7 +10,7 @@
 * [![Socket][Socket]][Socket-url]
 
 
-***Step to Start Project***
+## Step to Start Project
 
  1. Clone Project
  ```
