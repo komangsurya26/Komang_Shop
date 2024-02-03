@@ -34,6 +34,7 @@ npm start
 ## Usage
 
 _For more examples, please refer to the [Documentation](https://github.com/komangsurya26/Komang_Shop/blob/master/document.md)_
+_And If you want to more explore i prefer you go to [Postmant](https://documenter.getpostman.com/view/25455728/2s9YyvBfrb)_
 
 
 [Node.js]:https://img.shields.io/badge/NodeJs-green?style=for-the-badge&logo=nodedotjs
