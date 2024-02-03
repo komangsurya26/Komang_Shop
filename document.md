@@ -1,4 +1,4 @@
-# BINAR APP
+# KOMANG SHOP
 
 This documentation provides an overview of the key functionalities and endpoints of the E-Commerce application API.
 
