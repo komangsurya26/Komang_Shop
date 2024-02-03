@@ -36,7 +36,7 @@ npm start
 [Node-url]: https://nodejs.org/en
 [Express.js]: https://img.shields.io/badge/Express-black?style=for-the-badge&logo=express
 [Express-url]: https://expressjs.com/
-[Sequelize]: https://img.shields.io/badge/Sequelize-F5F8FA?style=for-the-badge&logo=sequelize
+[Sequelize]: https://img.shields.io/badge/sequelize-%2352B0E7?style=for-the-badge&logo=sequelize&logoColor=blue
 [Sequelize-url]: https://sequelize.org/
 [Jest]: https://img.shields.io/badge/jest-EE1B23?style=for-the-badge&logo=jest
 [Jest-url]: https://jestjs.io/
