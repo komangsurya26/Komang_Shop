@@ -30,7 +30,7 @@ async function register(req, res, next) {
     }
 
     //ceking format email 
-    if (!formatEmail(email)) {
+    if (formatEmail(email) === false) {
       return res.status(400).json(new ErrorResponse("Invalid email format", 400));
     }
 

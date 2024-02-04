@@ -40,7 +40,6 @@ async function createOrder(req, res, next) {
     const order = await Order.create(
       {
         user_id,
-        quantity,
         status_order: "Pending",
         total_order_price,
       },
